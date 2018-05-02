@@ -8,15 +8,36 @@ import Bodyparser from 'koa-bodyparser'
 import logger from 'koa-logger'
 import koaStatic from 'koa-static-plus'
 import koaOnError from 'koa-onerror'
+import mongoose from 'mongoose';
 import config from './config'
 
 const app = new Koa()
 const bodyparser = Bodyparser()
+const cors = require('koa2-cors');
+
+mongoose.Promise = Promise;
+// connect mongodb
+mongoose.connect(config.db.url);
+mongoose.connection.on('error', console.error);
 
 // middlewares
 app.use(convert(bodyparser))
 app.use(convert(json()))
 app.use(convert(logger()))
+// 具体参数我们在后面进行解释
+app.use(cors({
+  origin: function (ctx) {
+      // if (ctx.url === '/test') {
+          return "*"; // 允许来自所有域名请求
+      // }
+      // return 'http://127.0.0.1:1332'; 
+  },
+  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+  maxAge: 5,
+  credentials: true,
+  allowMethods: ['GET', 'POST', 'DELETE', 'PUT'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}))
 
 // static
 app.use(convert(koaStatic(path.join(__dirname, '../public'), {

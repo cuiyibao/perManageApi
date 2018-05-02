@@ -5,7 +5,7 @@
  */
 import fs from 'fs'
 import lodash, { isPlainObject, defaultsDeep } from 'lodash'
-import defaultConfig from './custom'
+import defaultConfig from './default'
 
 const cfgs = []
 fs.readdirSync(__dirname).map(filename => {
