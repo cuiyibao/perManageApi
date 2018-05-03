@@ -18,12 +18,16 @@ export async function findMessage(ctx) {
  * @param {*} ctx 
  */
 export async function createMessage(ctx) {
-    ctx.body = {
-        code: 0,
-        data: '111',
-        message: 'success'
-    }
-    ctx.status = 200
+    let params = ctx.request.body
+    let perMessage = new perModel(params)
+    await perMessage.save().then(function (err, egg1) {
+        ctx.body = {
+            code: 0,
+            data: perMessage,
+            message: 'success'
+        }
+        ctx.status = 200
+    })
 }
 
 /**
@@ -44,10 +48,12 @@ export async function updataMessage(ctx) {
  * @param {*} ctx 
  */
 export async function deleteMessage(ctx) {
-    ctx.body = {
-        code: 0,
-        data: '111',
-        message: 'success'
-    }
-    ctx.status = 200
+    let id = ctx.params.id.replace(':', '')
+    await perModel.remove({ '_id': id}).then(function (err, egg1) {
+        ctx.body = {
+            code: 0,
+            message: '删除成功'
+        }
+        ctx.status = 200
+    })
 }

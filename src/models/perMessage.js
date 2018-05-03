@@ -3,7 +3,12 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 const perSchema = new Schema({
     name: String,
-    phone: String
+    sex: String,
+    birthday: String,
+    area: String,
+    phone: String,
+    email: String,
+    detail: Object,
 }, { versionKey: false });
 
-module.exports = mongoose.model('egg1', perSchema);
+module.exports = mongoose.model('per_messgaes', perSchema);

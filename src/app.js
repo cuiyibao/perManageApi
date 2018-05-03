@@ -24,13 +24,14 @@ mongoose.connection.on('error', console.error);
 app.use(convert(bodyparser))
 app.use(convert(json()))
 app.use(convert(logger()))
-// 具体参数我们在后面进行解释
+
+// cors设置
 app.use(cors({
   origin: function (ctx) {
       // if (ctx.url === '/test') {
-          return "*"; // 允许来自所有域名请求
+          //return "*"; // 允许来自所有域名请求
       // }
-      // return 'http://127.0.0.1:1332'; 
+      return 'http://127.0.0.1:8990'; 
   },
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
