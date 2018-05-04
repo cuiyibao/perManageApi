@@ -4,13 +4,23 @@ import perModel from '../models/perMessage'
  * @param {*} ctx 
  */
 export async function findMessage(ctx) {
-    let data = await perModel.find()
-    ctx.body = {
-        code: 0,
-        data: data,
-        message: 'success'
+    let params = {}
+    if (ctx.query.name) {
+        params.name = {
+            $regex: `.*${ctx.query.name}.*`
+        }
     }
-    ctx.status = 200
+    if (ctx.query.area) {
+        params.area = ctx.query.area
+    }
+    await perModel.find(params).then(function (message) {
+        ctx.body = {
+            code: 0,
+            data: message,
+            message: '查找成功'
+        }
+        ctx.status = 200
+    })
 }
 
 /**
@@ -20,11 +30,11 @@ export async function findMessage(ctx) {
 export async function createMessage(ctx) {
     let params = ctx.request.body
     let perMessage = new perModel(params)
-    await perMessage.save().then(function (err, egg1) {
+    await perMessage.save().then(function (err, message) {
         ctx.body = {
             code: 0,
             data: perMessage,
-            message: 'success'
+            message: '新增成功'
         }
         ctx.status = 200
     })
@@ -35,12 +45,16 @@ export async function createMessage(ctx) {
  * @param {*} ctx 
  */
 export async function updataMessage(ctx) {
-    ctx.body = {
-        code: 0,
-        data: '111',
-        message: 'success'
-    }
-    ctx.status = 200
+    let id = ctx.params.id.replace(':', '')
+    let params = ctx.request.body
+    await perModel.findByIdAndUpdate(id, params).then(function (err, message) {
+        ctx.body = {
+            code: 0,
+            data: params,
+            message: '修改成功'
+        }
+        ctx.status = 200
+    })
 }
 
 /**
@@ -49,7 +63,7 @@ export async function updataMessage(ctx) {
  */
 export async function deleteMessage(ctx) {
     let id = ctx.params.id.replace(':', '')
-    await perModel.remove({ '_id': id}).then(function (err, egg1) {
+    await perModel.remove({ '_id': id }).then(function (err, message) {
         ctx.body = {
             code: 0,
             message: '删除成功'
