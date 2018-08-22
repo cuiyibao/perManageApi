@@ -29,9 +29,9 @@ app.use(convert(logger()))
 app.use(cors({
   origin: function (ctx) {
       // if (ctx.url === '/test') {
-          //return "*"; // 允许来自所有域名请求
+          return "*"; // 允许来自所有域名请求
       // }
-      return 'http://127.0.0.1:8990'; 
+      // return 'http://127.0.0.1:8990'; 
   },
   exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
   maxAge: 5,
